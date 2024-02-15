@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_secure_password
   has_many :blogs
   has_one :profile
 
@@ -15,7 +16,7 @@ class User < ApplicationRecord
   # This can be accomplished using built in validators via the following:
   # validates :email, uniqueness { case_sensitive: false }
   def validate_email_unique
-    existing = User.where("lower(email) = '#{email.downcase}'")
+    existing = User.where("lower(email) = '#{email&.downcase}'")
 
     if existing.count > 0
       errors.add(:email, 'is already taken')
