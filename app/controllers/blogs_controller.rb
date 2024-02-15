@@ -1,8 +1,9 @@
 class BlogsController < ApplicationController
+  before_action :authenticate_request
   def index
     blogs = Blog.all
 
-    render json: blogs
+    render json: BlogBlueprint.render(blogs, view: :normal)
   end
 
   def show
@@ -12,16 +13,25 @@ class BlogsController < ApplicationController
   end
 
   def create
-    blog = Blog.create(blog_params)
-
-    render json: blog
+    blog = Blog.new(blog_params)
+    blog.user_id = @current_user.id
+    blog.category_ids = params['category_ids']
+    if blog.save
+      render json: blog, status: :created
+    else
+      render json: blog.errors, status: :unprocessable_entity
+    end
+    
   end
 
   def update
     blog = Blog.find(params[:id])
-    blog.update(blog_params)
-
-    render json: blog
+    blog.assign_attributes(blog_params)
+    if blog.save
+      render json: blog, status: :ok
+    else
+      render json: blog.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
