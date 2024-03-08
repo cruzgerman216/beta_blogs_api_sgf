@@ -10,7 +10,7 @@ class BlogsController < ApplicationController
   def show
     blog = Blog.find(params[:id])
 
-    render json: blog
+    render json: BlogBlueprint.render(blog)
   end
 
   def create
@@ -45,6 +45,6 @@ class BlogsController < ApplicationController
   private
 
   def blog_params
-    params.permit(:title, :content)
+    params.permit(:title, :content, :cover_image)
   end
 end
