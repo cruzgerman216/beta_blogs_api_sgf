@@ -41,6 +41,7 @@ gem "blueprinter"
 
 group :production do
   gem 'pg'
+  gem 'cloudinary'
 end
 
 group :development, :test do
