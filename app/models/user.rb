@@ -1,7 +1,10 @@
 class User < ApplicationRecord
   has_secure_password
+
+  # associations
   has_many :blogs
   has_one :profile
+  has_many :likes
 
   after_create :create_profile
 
